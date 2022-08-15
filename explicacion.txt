@@ -1,0 +1,374 @@
+GRID CSS
+  Es un sistema de maquetacion BIDIMENSIONAL osea que permite filas y columnas al mismo tiempo a diferencia de flexbox que es unidireccional pero esto no quiere decir que lo reempla sino que sirve para COMPLEMENTAR flexbox.
+  Podemos usar ambos:
+    Usamos Flexbox para alinear los componentes internos tipo tarjetas o modales.
+    Usamos Grid CSS para crear la grilla osea donde va a ir cada elemento ya que permite tener filas y columnas podemos definir un area para el header otra para un aside otra para un container de tarjetas etc.
+
+CONCEPTOS DE GRID CSS (En el HTML y en la pagina de mircha hay un articulo con las imagenes de ejemplo)
+  CONTENEDOR PADRE (GRID CONTAINER)
+
+  ELEMENTOS HIJOS (GRID ITEMS)
+
+  LINEAS DE CUADRICULA (GRID LINES)
+
+  PISTA DE CUADRICULA (GRID TRACK) [FILA O COLUMNA]
+
+  CELDA DE CUADRICULA (GRID CELL)
+
+  AREA DE CUADRICULA (GRID AREA)
+
+
+Hay muchas formas de definir una grid. La mas facil es la explicita.
+  Es grid explicita porque la definimos dando el numero de filas y el numero de columnas.
+  PARA USAR GRID CSS SE LE PONE DISPLAY GRID AL CONTENEDOR.
+
+
+GRID EXPLICITA 
+ Es grid explicita porque la definimos dando el numero de filas y el numero de columnas. 
+ PARA USAR GRID CSS SE LE PONE DISPLAY GRID AL CONTENEDOR Y SE LE DA EL NUMERO DE FILAS Y COLUMNAS CON:
+   GRID-TEMPLATE-COLUMNS: col1  col2 ...  col n            [Acepta medidas rem,px,%,vw,vh y tambien fr]
+   GRID-TEMPLATE-ROWS: row1  row2  ...  row n              [Acepta medidas rem,px,%,vh,vw y tambien fr]
+
+ Unidad de medida fr: es una nueva medida que viene para grid css con flexbox que significa el espacio sobrante. Si tengo 100px y hago una columna de 60px entonces en este caso 1fr = 40px, osea el espacio sobrante.
+
+
+GAP
+  Para dar separacion entre las lineas, filas o columnas. Antes era con gri-row-gap y grid-column-grap y el shorthand grid-gap: row column.
+  Aceptan rems px % etc. PERO ESTAN DESPRECIADAS
+  AHORA SE USA SOLO ROW-GAP, COLUMN-GAP Y EL SHORTHAND GAP. Hacen lo mismo. 
+
+
+POSICIONAR ELEMENTOS
+  Para posicionar elementos les aplicamos propiedades al elemento que quieramos mediante el nth-child. 
+  Las propiedades que nos dicen que desde lineas (Grid lines) hasta que lineas ocupe el elmento son:
+    grid-row-start: linea de fila donde comienza.
+    grid-row-end: linea de fila donde termina.
+    grid-column-start: linea de columna donde comienza.
+    grid-column-end: linea de columna donde termina.
+
+  Hay un shorthand que resume todo esto:
+    Para fila:
+      grid-row: row-start / row-end  (IMPORTANTE NO OLVIDAR EL /)
+    Para columna:
+      grid-column: column-start / column-end
+    grid: row-start column-start row-end column-end.
+
+    Para ambos:
+      grid-area: row-start / column-start / row-end / column-end
+
+  TAMBIEN AL DARLE POR EJEMPLO GRID ROW START 2 Y GRID ROW START 5 PODEMOS HACER QUE EL ELEMENTO OCUPE VARIAS CELDAS DE FILAS Y O COLUMNAS DEPENDIENDO DE LOS VALORES QUE LE DEMOS. OSEA PODEMOS COMBINAR CELDAS
+  Cuando se le de una posicion a un item empuja al otro que tenia la misma posicion.
+  RECIBEN NUMEROS ENTEROS OSEA EL NUMERO DE LINEA.
+
+
+OTRA FORMA DE POSICIONAR ELEMENTOS
+  Con la palabra span puedo decirle el numero de celdas que ocupe. Si quiero que ocupe n numero de filas hago grid-row: span n;
+  Si quiero que ocupe n numero de columnas hago grid-column: span n;
+
+  Este esta bueno usar cuando quiero que ocupen mas celdas y no quiero moverlo entonces no le digo en que linea empezar y terminar. Directamente le digo que desde donde esta se expanda con span.
+
+
+
+CUANDO HACEMOS ESTO DE POSICIONAR ELEMENTOS CONVIENE POSICIONAR TODOS LOS ELEMENTOS! ASI EVITAMOS QUE SE DESORDENEN Y SE VAYAN A LUGARES QUE NO QUERAMOS.
+*/
+.grid-explicit .item:nth-child(12) {
+  color: chartreuse;
+
+  grid-row: span 2;
+  grid-column: span 3;
+}
+
+/*Tambien puedo mezclar las dos formas*/
+.grid-explicit .item:nth-child(15) {
+  color: deeppink;
+
+  grid-row: 1 / span 2;
+  grid-column: 1 / span 2;
+}
+
+
+
+DAR NOMBRES A LAS LINEAS
+  Para darle nombre a las lineas de grid usamos grid-template-columns y grid-template-rows abriendo y cerrando corchetes por cada linea y dentro el nombre que quieramos ponerle, tambien hay que darle el tamaño que queremos de columna o fila.
+    display-template-columns: [nombre linea 1] 200px [nombre linea 2] 200px ... [nombre linea n]
+  Como hay una linea mas que columna o fila entonces siempre se termina con el nombre de la ultima linea y sin tamaño al lado porque no hay nada a que darle tamaño.
+  A un cuadrado de 3x3 va a tener 4 lineas en columnas y 4 lineas en filas.
+  
+  Despues ya se usa como antes pero esta vez dando el nombre que pusimos a las lineas:
+    .grid-line-names .item:nth-child(3) {
+      color: cyan;
+      grid-row: linea-r3 / linea-r4;
+      grid-column: linea-c1 / linea-c4;
+    }
+
+  EL SHORCUT GRID-AREA NO FUNCIONA CUANDO LE DAMOS NOMBRE A LAS LINEAS.
+  No conviene usar nombres de linea es mejor trabajar como veniamos antes solamente con el numero.
+
+
+
+POSICIONAMIENTO CON GRID AREA
+  Esto esta buenisimo para cuando hago una grid voy definiendo areas de contenido por ejemplo un area para la cabecera, otra para el footer otra para un menu de costado etc.
+
+  Para posicionar areas se usa la propiedad grid-template-areas. En esta propiedad puedo ir distribuyendo areas, cada fila va a estar identificada por comillas, y dentro de las comillas voy poniendo nombres para las areas a ocupar en la columna.
+
+    grid-template-areas: 
+                    "nombre1 nombre2"
+                    "nombre3 nombre3"
+                    "nombre4 nombre5";
+
+  En el ejemplo de arriba tengo 5 areas que se llaman nombre1,nombre2,nombre3,nombre4,nombre5. El area nombre1 va a ocupar la primer fila y primer columna, nombre2 va a ocupar la primer fila y segunda columna. EL AREA NOMBRE3 HICE QUE OCUPE LA SEGUNDA FILA, PERO QUIERO QUE OCUPE TODA LA FILA ENTONCES LE ASIGNO LAS DOS COLUMNAS PONIENDO SU NOMBRE. Despues pongo al area nombre4 en la tercer fila primer columna y nombre5 tercer fila segunda columna.
+
+  Para darle nombre de areas a los elementos y se posicionen en los lugares que les designe con grid-template-areas tengo que usar la propiedad GRID-AREA: NOMBRE; dentro del selector del elemento que quiero que se llame asi. Grid-Area era un shortcut para row-start row-end ... Pero cuando solo le damos un nombre le asigna ese nombre de area.
+        #elemento1{
+          grid-area: nombre1;
+        }
+
+
+ Para dejar celdas vacias con grid areas simplemente utilizo el punto (.) esto hace que la celda este vacia.
+  Dejo la celda abajo del sidebar vacia:
+    grid-template-areas:
+      "header header"
+      "content sidebar"
+      "content ."
+      "footer footer";
+
+
+GRID IMPLICITA 
+  Esto es mas teoria, es lo que pasa cuando tenemos una grid en la que no entran todos los elementos (por ejemplo tenemos una grid de 4x4 osea que entran 16 elementos, los 16 primeros van a respetar las propiedades de col y row que definimos explicitamente, pero del 17 para adelante no van a respetar lo explicito sino que vienen implicitas) que aparezcan. En este caso todos los elementos que no entren se van a generar con la anchura de la columna pero con altura row auto osea el tamaño del contenido de cada celda.
+
+GRID DE BLOQUES Y DE LINEA
+  El comportamiento de la grid por default es de bloque. Tambien se le puede dar comportamiento en linea con display: inline-grid.
+
+FLUJO DE LA GRID
+  Por defecto es en fila osea izquierda a derecha arriba abajo. Puedo cambiar el flujo con la propiedad grid-auto-flow:
+    row: es el por defecto por fila
+    column: es por columna. De arriba abajo y despues izquierda a derecha.
+
+IMPORTANTE PARA LA GRID IMPLICITA!!!
+  Cuando se generan columnas o filas implicitas entran con el tamaño del contenido osea auto, si quiero establecer otro tamaño para las filas o columnas implicitas lo hago con grid-auto-rows y grid-auto-columns y le doy el valor del tamaño que quiera, por defecto es auto.
+    Filas implicitas
+      grid-auto-rows: 100px;
+
+    Columnas implicitas
+      grid-auto-columns: 100px;
+
+FLUJO DENSO DE LA GRID
+  Cuando definimos grid areas o usamos span a veces quedan espacios vacios en algunos lados. Implicitamente los nuevos elementos se van a agregar como nuevas filas o columnas segun como tengan el flujo que por defecto es row. PERO SI QUIERO APROVECHAR ESE ESPACIO VACIO QUE QUEDA METIENDO ELEMENTOS IMPLICITOS AHÍ SE HACE AGREGANDO AL GRID AUTO FLOW LA PROPIEDAD DENSE. ESTO VA A LLENAR TODOS LOS HUECOS CON ELEMENTOS.
+    Fila
+      grid-auto-flow: row dense;
+
+    Columna
+      grid-auto-flow: column dense;
+
+
+GRID ITEMS EN CAPAS
+  Podemos hacer que algunos elementos se posicionen arriba o atras de otros como en las capas de photoshop. Se hace generando la grid explicita y posicionando cada elemento en las lineas que quiero, y si quiero uno arriba de otro hago que empieze sobre alguna linea de otro y solito se va a poner por arriba. El codigo en el css y html para entender bien la explicacion.
+
+    /*Aca simplemente posicionandolo sobre estas lineas solo se pone por arriba de los otros items*/
+    .grid-layers .item:nth-child(5) {
+      background-color: #c92af0;
+      grid-column: 2 / 4;
+      grid-row: 2 / 4;
+    }
+
+
+ORDEN Y ALINEACION DE GRID ITEMS
+
+  ORDEN DE LOS ITEMS
+    Para cambiar el orden de los elementos lo hago con la propiedad ORDER igual que en flexbox. Por defecto 0 mas bajo el numero va a estar mas al inicio y mietnras mas alto mas al final (tambien acepta valores negativos). Se acomodan de acuerdo el flujo natural, fila o columna, no aplica cuando usamos areas o posicionamos por numero de lineas.
+    
+      .grid-order .item:nth-child(1) {
+        order: 2;
+        color: cyan;
+      }
+
+
+  ALINEACION DE LOS ITEMS (CELDAS)
+    Es como la alineacion en flexbox. Para alinear los items en grid css se usa la propiedad JUSTIFY-ITEMS, por defecto es stretch que toma el valor que le di a la grid osea el contenido de la celda se estira para ocupar toda la celda en X. Trabaja sobre el eje X y los otros valores son:
+      start: alinea el contenido de las celdas al empiezo.
+      center: alinea el contenido de las celdas al centro.
+      end: alinea el contenido de las celdas al final.
+
+    Al cambiar de stretch a otros valores se ocupa solo lo que ocupa el contenido no lo estira.
+
+    PARA EL EJE Y SE USA ALIGN-ITEMS por defecto tambien es stretch que tambien hace que en Y el contenido se estire al tamaño de la celda. Si cambio el stretch por otros valor pasa a tener solo la altura del contenido. Los otros valores son:
+     start: alinea sobre el eje y el contenido al empiezo.
+     end: alinea sobre el eje y el contenido al fin.
+     center: alinea sobre el eje y el contenido al centro.
+
+    .grid-align {
+      display: grid;
+      grid-template-columns: repeat(3, 200px);
+      grid-template-rows: repeat(2, 200px);
+
+      justify-items: stretch;
+      justify-items: start;
+      justify-items: center;
+      justify-items: end;
+
+      align-items: stretch;
+      align-items: start;
+      align-items: end;
+      align-items: center;
+    }
+
+  PARA ALINEAR UN UNICO ELEMENTO SE USA ALIGN-SELF Y JUSTIFY-SELF
+
+    .grid-align .item:nth-child(4) {
+      align-self: start;
+      justify-self: start;
+      color: cyan;
+    }  
+
+ALINEACION DE GRID TRACKS
+  Un grid track es toda una fila o toda una columna. Puedo alinear toda una fila o toda una columna usamos la propiedad justify-content (x) y align-content (y). Hay que tener espacio en blanco para poder moverlas dentro del contenedor de la grid.
+    justify-content/align-content:
+      start: es el por defecto pone toda la fila al inicio.
+      end: pone todas las filas o columnas al final.
+      center: pone todas las filas o columnas al centro.
+      space-between: como en flexbox no deja espacio al final y comienzo y distribuye el mismo espacio entre filas o columnas.
+      space-around: pone la mitad del espacio al empiezo y final y distribuye el resto el mismo espacio entre filas o columnas.
+      space-evenly: mismo espacio entre filas o columnas y el principio y final.
+
+
+      .grid-align-tracks {
+        display: grid;
+        grid-template-columns: repeat(3, 200px);
+        grid-template-rows: repeat(2, 200px);
+
+        justify-content: start;
+        justify-content: end;
+        justify-content: center;
+        justify-content: space-between;
+        justify-content: space-around;
+        justify-content: space-evenly;
+
+        align-content: start;
+        align-content: end;
+        align-content: center;
+        align-content: space-between;
+        align-content: space-around;
+        align-content: space-evenly;
+      }
+
+
+
+************************************************************* IMPORTANTE ***********************************************************************
+ AL SOLO UTILIZAR GRID TEMPLATE COLUMNS DEFINO EXPLICITAMENTE EL NUMERO DE COLUMNAS Y SI NO USO EL GRID TEMPLATE ROWS LAS FILAS SE VAN A GENERAR DE FORMA IMPLICITA DINAMICAMENTE SEGUN LA CANTIDAD DE ELEMENTOS
+************************************************************************************************************************************************
+
+
+
+TAMAÑOS MINIMOS Y MAXIMOS
+  Esta funcion de grid es super IMPORTANTE define el tamaño maximo y minimo que pueden tenerlos items de las filas y las columnas. La funcion es minmax() y la usamos en gri-template-row o grid-template-columns dependiendo de cual queremos ajustar.
+    minmax(tamañoMinimo, tamañoMaximo)
+    
+  Grid de 4 columnas y las filas van a depender de la cantidad de elementos
+    grid-template-columns: repeat(4, minmax(100px, 200px));
+
+  Minmax vienen con dos valores interesantes: min-content y max-content
+    min-content: es el valor del item mas pequeño de la fila o columna (track)
+    max-content: es el valor del item mas grande de la fila o columna (track)
+
+
+GRID CON PATRONES REPETITIVOS
+  Para hacer patrones repetitivos uso el repeat como acostumbro pero en vez de darle un solo tamaño voy dandole varios tamaños para las distintas columnas o filas, esta bueno para usar porcentajes por ejemplo podria decir que tenga 4 columnas en la que la primera tenga 10% segunda 20% tercera 30% y la ultima 40% siendo el total el 100%. Ahora uno pondria la funcion asi repeat(4, 10% 20% 30% 60%) PERO ESTO ESTA MAL porque va a repetir 4 VECES en una sola linea ese patron por eso hay que tener cuidado al usar los patrones repetitivos, yo quiero que se repita por cada fila que se genera implicitamente entonces quiero que el patron se repita una vez por fila por lo que el primer valor va a ser la cantidad de veces que se repita el patron por linea. LA FUNCION CORRECTA QUEDARIA ASI:
+
+    repeat(1, 10% 20% 30% 40%);
+
+
+    .grid-repeat {
+      display: grid;
+
+      grid-template-columns: repeat(1, 10% 20% 30% 40%);
+
+      /*Ahora uso patrones en las filas para que la primera mida 100px la segunda 200px y se repita para abajo sucesivamente dentro de las filas definidas explicitamente, las que se generan implicitamente no, acordate que esas entran con tamaño auto por defecto. Repeat NO sirve en la propiedad grid-auto-rows (para dar tamaño a las filas implicitas) asi que a las implicitas no le vamos a poder dar patrones repetitivos*/
+      grid-template-rows: repeat(2, 100px 200px);
+    }
+
+
+GRID DINAMICAS RESPONSIVE SIN MEDIA QUERIES
+  Para hacer las grid dinamicas responsivas nos ayudamos de dos valores nuevos en grid que son auto-fit y auto-fill estas se ponen en el primer valor de la funcion repeat().
+    auto-fill: rellena la grid con tracks(filas o columnas) generados dinamicamente, osea genera filas o columnas vacias a lo largo del grid.
+    auto-fit: ajusta la grid con los tracks existentes.
+
+
+    .grid-dynamics {
+      display: grid;
+      /*4 columnas y filas generadas automaticamente implicitamente*/
+      grid-template-columns: repeat(4, 100px);
+
+      grid-template-columns: repeat(auto-fill, 100px);
+      grid-template-columns: repeat(auto-fit, 100px);
+
+      /*
+      Casos con minmax
+        minmax(100px, 1fr) = valor minimo 100px y el valor maximo el espacio sobrante
+      */
+      /*Con auto-fill me mete las 5 columnas y el espacio vacio son nuevas columnas vacias, cuando no tiene espacio se van a abajo y se va haciendo responsive hasta quedar todo en una unica columna como ya se.*/
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+
+      /*Con auto-fit hace que las columnas ocupen TODO el contenedor las hace crecer ocupando todo el contenedor, entonces cuando tenga un solo elemento este va a ocupar todo el contenedor que es lo que me molestaba en el market que se veia re grande un solo articulo. Cuando no tiene espacio se van a abajo y se va haciendo responsive hasta quedar todo en una unica columna como ya se. */
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+
+
+
+RESPONSIVE SIN MEDIA QUERIES
+.grid-responsive {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+
+
+GRID ANIDADAS Y SUBGRIDS
+  GRIDS ANIDADAS
+    Es hacer que un elemento hijo de un grid tambien tenga comportamiento grid. Para hacerlo simplente declaro el display grid y grid template column al hijo como siempre, en el ejemplo directamente le meto la clase .grid-nested al hijo. Entonces tengo dos grids uno es el contenedor padre y el hijo tiene otra grid independiente.
+
+    .grid-nested {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .sub-item {
+      padding: 1rem;
+      border: medium solid #ccc;
+      background-color: #ddd;
+    }
+
+
+SUBGRIDS
+  AL DIA DE HOY SUBGRID TODAVIA NO ESTA SOPORTADO LO ENSEÑA PARA CUANDO ALGUN MOMENTO ESTE SOPORTADO. SOLO LO SOPORTA FIREFOX POR AHORA.
+  Para que la caracteristica de subgrid funcione es necesario hacer lo siguiente:
+    1)Definir explicitamente el tamaño que ocupara el elemento que aplicara subgrid dentro del contenedor padre grid, es decir definir sus propiedades grid-column y grid-row.
+
+    2)Aplicar display grid al elemento que aplicara subgrid.
+
+    3)Aplicar el valor subgrid a las columnas o a las filas o ambas depende de como se requiera.
+
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+    }
+
+    .subgrid {
+      /*Paso 1*/
+      grid-column: span 3;
+      grid-row: 1 / 3;
+      /*Paso 2*/
+      display: grid;
+      /*Paso 3*/
+      grid-template-columns: subgrid;
+      grid-template-rows: subgrid;
+    }
+
+
+
+
+EJERCICIOS
+  En grid_layout.html hay un ejercicio de una holy gray layout con grid css.
+  El mismo ejercicio pero mucho mejor resuelto con areas esta en grid_layout_area.html.
